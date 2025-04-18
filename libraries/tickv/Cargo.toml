@@ -18,6 +18,8 @@ categories = ["database-implementations", "no-std"]
 [package.metadata.flux]
 enabled = true
 
+[dependencies]
+flux-rs = { git  = "https://github.com/flux-rs/flux.git" }
 
 [lints]
 workspace = true

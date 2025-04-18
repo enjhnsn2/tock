@@ -128,6 +128,7 @@ impl<'a, C: FlashController<S>, const S: usize> TicKV<'a, C, S> {
     ///
     /// On success nothing will be returned.
     /// On error a `ErrorCode` will be returned.
+    #[flux_rs::trusted]
     pub fn initialise(&self, hashed_main_key: u64) -> Result<SuccessCode, ErrorCode> {
         let mut buf: [u8; 0] = [0; 0];
 
@@ -205,6 +206,7 @@ impl<'a, C: FlashController<S>, const S: usize> TicKV<'a, C, S> {
     }
 
     /// Get region number from a hashed key
+    #[flux_rs::trusted]
     fn get_region(&self, hash: u64) -> usize {
         assert_ne!(hash, 0xFFFF_FFFF_FFFF_FFFF);
         assert_ne!(hash, 0);
@@ -228,6 +230,7 @@ impl<'a, C: FlashController<S>, const S: usize> TicKV<'a, C, S> {
     // This function will return an offset that can be applied to
     // region to determine a new flash region
     // Returns None if there aren't any more in range.
+    #[flux_rs::trusted]
     fn increment_region_offset(&self, region: usize, region_offset: isize) -> Option<isize> {
         let mut too_big = false;
         let mut too_small = false;
@@ -268,6 +271,7 @@ impl<'a, C: FlashController<S>, const S: usize> TicKV<'a, C, S> {
     /// total length of the key.
     /// On failure return a bool indicating if the caller should keep looking in
     /// neighboring regions and the error code.
+    #[flux_rs::trusted]
     fn find_key_offset(
         &self,
         hash: u64,
@@ -390,6 +394,7 @@ impl<'a, C: FlashController<S>, const S: usize> TicKV<'a, C, S> {
     ///
     /// On success nothing will be returned.
     /// On error a `ErrorCode` will be returned.
+    #[flux_rs::trusted]
     pub fn append_key(&self, hash: u64, value: &[u8]) -> Result<SuccessCode, ErrorCode> {
         let region = self.get_region(hash);
         let check_sum = crc32::Crc32::new();
@@ -664,6 +669,7 @@ impl<'a, C: FlashController<S>, const S: usize> TicKV<'a, C, S> {
     ///
     /// If a power loss occurs before success is returned the data is assumed to
     /// be lost.
+    #[flux_rs::trusted]
     pub fn get_key(&self, hash: u64, buf: &mut [u8]) -> Result<(SuccessCode, usize), ErrorCode> {
         let region = self.get_region(hash);
 
@@ -800,6 +806,7 @@ impl<'a, C: FlashController<S>, const S: usize> TicKV<'a, C, S> {
     ///
     /// If a power loss occurs before success is returned the data is
     /// assumed to be lost.
+    #[flux_rs::trusted]
     pub fn invalidate_key(&self, hash: u64) -> Result<SuccessCode, ErrorCode> {
         let region = self.get_region(hash);
 
@@ -899,6 +906,7 @@ impl<'a, C: FlashController<S>, const S: usize> TicKV<'a, C, S> {
     ///
     /// If a power loss occurs before success is returned the data is
     /// assumed to be lost.
+    #[flux_rs::trusted]
     pub fn zeroise_key(&self, hash: u64) -> Result<SuccessCode, ErrorCode> {
         let region = self.get_region(hash);
 
@@ -983,6 +991,7 @@ impl<'a, C: FlashController<S>, const S: usize> TicKV<'a, C, S> {
         }
     }
 
+    #[flux_rs::trusted]
     fn garbage_collect_region(
         &self,
         region: usize,
@@ -1101,6 +1110,7 @@ impl<'a, C: FlashController<S>, const S: usize> TicKV<'a, C, S> {
     ///
     /// On success the number of bytes freed will be returned.
     /// On error a `ErrorCode` will be returned.
+    #[flux_rs::trusted]
     pub fn garbage_collect(&self) -> Result<usize, ErrorCode> {
         let num_region = self.flash_size / S;
         let mut flash_freed = 0;
