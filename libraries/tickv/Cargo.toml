@@ -15,5 +15,9 @@ readme = "README.md"
 keywords = ["flash", "key-value-store"]
 categories = ["database-implementations", "no-std"]
 
+[package.metadata.flux]
+enabled = true
+
+
 [lints]
 workspace = true
