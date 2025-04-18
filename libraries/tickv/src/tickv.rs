@@ -211,7 +211,6 @@ impl<'a, C: FlashController<S>, const S: usize> TicKV<'a, C, S> {
     }
 
     /// Get region number from a hashed key
-    #[flux_rs::trusted]
     fn get_region(&self, hash: u64) -> usize {
         assert_ne!(hash, 0xFFFF_FFFF_FFFF_FFFF);
         assert_ne!(hash, 0);
@@ -235,7 +234,6 @@ impl<'a, C: FlashController<S>, const S: usize> TicKV<'a, C, S> {
     // This function will return an offset that can be applied to
     // region to determine a new flash region
     // Returns None if there aren't any more in range.
-    // #[flux_rs::trusted]
     fn increment_region_offset(&self, region: usize, region_offset: isize) -> Option<isize> {
         let mut too_big = false;
         let mut too_small = false;
@@ -276,14 +274,13 @@ impl<'a, C: FlashController<S>, const S: usize> TicKV<'a, C, S> {
     /// total length of the key.
     /// On failure return a bool indicating if the caller should keep looking in
     /// neighboring regions and the error code.
-    #[flux_rs::trusted]
+    // #[flux_rs::trusted]
     fn find_key_offset(
         &self,
         hash: u64,
         region_data: &[u8],
     ) -> Result<(usize, u16), (bool, ErrorCode)> {
         // Determine the total size of our payload
-
         // Split the hash
         let hash = hash.to_ne_bytes();
 
@@ -996,7 +993,6 @@ impl<'a, C: FlashController<S>, const S: usize> TicKV<'a, C, S> {
         }
     }
 
-    #[flux_rs::trusted]
     fn garbage_collect_region(
         &self,
         region: usize,
@@ -1115,7 +1111,6 @@ impl<'a, C: FlashController<S>, const S: usize> TicKV<'a, C, S> {
     ///
     /// On success the number of bytes freed will be returned.
     /// On error a `ErrorCode` will be returned.
-    #[flux_rs::trusted]
     pub fn garbage_collect(&self) -> Result<usize, ErrorCode> {
         let num_region = self.flash_size / S;
         let mut flash_freed = 0;
