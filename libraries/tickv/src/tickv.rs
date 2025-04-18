@@ -58,9 +58,12 @@ pub(crate) enum State {
 }
 
 /// The struct storing all of the TicKV information.
+// #[flux_rs::refined_by(flash_size: int)]
+// #[flux_rs::invariant(flash_size > 0)]
 pub struct TicKV<'a, C: FlashController<S>, const S: usize> {
     /// The controller used for flash commands
     pub controller: C,
+    // #[flux_rs::field(usize[flash_size])]
     flash_size: usize,
     pub(crate) read_buffer: Cell<Option<&'a mut [u8; S]>>,
     pub(crate) state: Cell<State>,
@@ -230,7 +233,7 @@ impl<'a, C: FlashController<S>, const S: usize> TicKV<'a, C, S> {
     // This function will return an offset that can be applied to
     // region to determine a new flash region
     // Returns None if there aren't any more in range.
-    #[flux_rs::trusted]
+    // #[flux_rs::trusted]
     fn increment_region_offset(&self, region: usize, region_offset: isize) -> Option<isize> {
         let mut too_big = false;
         let mut too_small = false;
