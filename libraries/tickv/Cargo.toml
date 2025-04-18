@@ -20,6 +20,7 @@ enabled = true
 
 [dependencies]
 flux-rs = { git  = "https://github.com/flux-rs/flux.git" }
+flux_support = { path = "../../flux_support" }
 
 [lints]
 workspace = true

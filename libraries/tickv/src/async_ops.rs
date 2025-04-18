@@ -152,7 +152,7 @@ pub struct AsyncTicKV<'a, C: FlashController<S>, const S: usize> {
 }
 
 impl<'a, C: FlashController<S>, const S: usize> AsyncTicKV<'a, C, S> {
-    /// Create a new struct
+    /// Create a new structcopy_from_slice
     ///
     /// `C`: An implementation of the `FlashController` trait
     ///
@@ -312,6 +312,7 @@ impl<'a, C: FlashController<S>, const S: usize> AsyncTicKV<'a, C, S> {
     /// This should be used to copy the data that the implementation wanted
     /// to read when calling `read_region` after the async operation has
     /// completed.
+    #[flux_rs::trusted]
     pub fn set_read_buffer(&self, read_buffer: &[u8]) {
         let buf = self.tickv.read_buffer.take().unwrap();
         buf.copy_from_slice(read_buffer);

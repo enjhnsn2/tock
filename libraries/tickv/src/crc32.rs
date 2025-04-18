@@ -19,6 +19,8 @@
 //!     MIT License (LICENSE-MIT <http://opensource.org/licenses/MIT>)
 //! at your option.
 
+use flux_support::*;
+
 use core::cell::Cell;
 
 const CRC_TABLE: [u32; 256] = [
@@ -335,6 +337,7 @@ impl Crc {
         0x00000000
     }
 
+    #[flux_rs::trusted]
     const fn table_entry(&self, index: u32) -> u32 {
         CRC_TABLE[(index & 0xFF) as usize]
     }
